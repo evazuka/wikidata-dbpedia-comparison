@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/wikidata-dbpedia-comparison/static/css/main.69eda509.chunk.css",
+    "main.js": "/wikidata-dbpedia-comparison/static/js/main.4f172cd5.chunk.js",
+    "main.js.map": "/wikidata-dbpedia-comparison/static/js/main.4f172cd5.chunk.js.map",
+    "runtime-main.js": "/wikidata-dbpedia-comparison/static/js/runtime-main.3043db43.js",
+    "runtime-main.js.map": "/wikidata-dbpedia-comparison/static/js/runtime-main.3043db43.js.map",
+    "static/js/2.fb402a4d.chunk.js": "/wikidata-dbpedia-comparison/static/js/2.fb402a4d.chunk.js",
+    "static/js/2.fb402a4d.chunk.js.map": "/wikidata-dbpedia-comparison/static/js/2.fb402a4d.chunk.js.map",
+    "index.html": "/wikidata-dbpedia-comparison/index.html",
+    "precache-manifest.5f474e923dadb7b41c17bc9b2d2d2f6d.js": "/wikidata-dbpedia-comparison/precache-manifest.5f474e923dadb7b41c17bc9b2d2d2f6d.js",
+    "service-worker.js": "/wikidata-dbpedia-comparison/service-worker.js",
+    "static/css/main.69eda509.chunk.css.map": "/wikidata-dbpedia-comparison/static/css/main.69eda509.chunk.css.map",
+    "static/js/2.fb402a4d.chunk.js.LICENSE.txt": "/wikidata-dbpedia-comparison/static/js/2.fb402a4d.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.3043db43.js",
+    "static/js/2.fb402a4d.chunk.js",
+    "static/css/main.69eda509.chunk.css",
+    "static/js/main.4f172cd5.chunk.js"
+  ]
+}
