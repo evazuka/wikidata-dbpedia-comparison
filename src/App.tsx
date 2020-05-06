@@ -20,15 +20,17 @@ const tree = data => {
 
 class Index extends React.Component {
     endpointUrl = 'https://query.wikidata.org/sparql';
-    sparqlQuery = `SELECT DISTINCT ?person ?personLabel ?yob ?yod ?descendant ?descendantLabel ?pic WHERE {
+    sparqlQuery = `SELECT DISTINCT ?person ?personLabel ?birth ?death ?descendant ?descendantLabel ?pic WHERE {
         wd:Q9682 wdt:P40* ?person .
         ?person wdt:P40 ?descendant .
-        ?descendant wdt:P569 ?dob .
   OPTIONAL { ?descendant wdt:P18 ?picture . }
-  OPTIONAL {?person wdt:P570 ?dod . }
+  OPTIONAL {?descendant wdt:P569 ?dob . }
+  OPTIONAL {?descendant wdt:P570 ?dod . }
   BIND(YEAR(?dob) as ?yob) .
   BIND(YEAR(?dod) as ?yod) .
   BIND(COALESCE(?picture, "") as ?pic) .
+  BIND(COALESCE(?yob, "") as ?birth) .
+  BIND(COALESCE(?yod, "") as ?death) .
         SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
       }`;
     queryDispatcher = new SPARQLQueryDispatcher(this.endpointUrl);
@@ -45,7 +47,7 @@ class Index extends React.Component {
     renderD3 = (result) => {
         console.log(result.results.bindings);
         const data = result.results.bindings
-            .map((x: any) => ({ id: x.descendant.value, name: x.descendantLabel.value, yob: x.yob.value, picture: x.pic.value, parent: x.person.value }));
+            .map((x: any) => ({ id: x.descendant.value, name: x.descendantLabel.value, birth: x.birth.value, death: x.death.value, picture: x.pic.value, parent: x.person.value }));
         data.unshift({ id: "http://www.wikidata.org/entity/Q9682", name: "Elizabeth II", parent: "" })
         console.log(data);
         const root = tree(data);
@@ -104,13 +106,33 @@ class Index extends React.Component {
             .clone(true).lower()
             .attr("stroke", "white");
 
-        node.append("text")
-            .attr("dy", "1.3em")
-            .attr("x", d => d.children ? -6 : 6)
-            .attr("text-anchor", d => d.children ? "end" : "start")
-            .text((d: any) => d.data.yob)
-            .clone(true).lower()
-            .attr("stroke", "white");
+        if ((d: any) => (d.data.birth && d.data.death) !== "") {
+            if ((d: any) => ((d.data.birth !== "") && (d.data.death == ""))) {
+                node.append("text")
+                    .attr("dy", "1.3em")
+                    .attr("x", d => d.children ? -6 : 6)
+                    .attr("text-anchor", d => d.children ? "end" : "start")
+                    .text((d: any) => 'b. ' + d.data.birth)
+                    .clone(true).lower()
+                    .attr("stroke", "white");
+            } else if ((d: any) => ((d.data.birth == "") && (d.data.death !== ""))) {
+                node.append("text")
+                    .attr("dy", "1.3em")
+                    .attr("x", d => d.children ? -6 : 6)
+                    .attr("text-anchor", d => d.children ? "end" : "start")
+                    .text((d: any) => 'd. ' + d.data.death)
+                    .clone(true).lower()
+                    .attr("stroke", "white");
+            } else {
+                node.append("text")
+                    .attr("dy", "1.3em")
+                    .attr("x", d => d.children ? -6 : 6)
+                    .attr("text-anchor", d => d.children ? "end" : "start")
+                    .text((d: any) => 'b. ' + d.data.birth + ' - d. ' + d.data.death)
+                    .clone(true).lower()
+                    .attr("stroke", "white");
+            }
+        }
     }
 
     render() {
