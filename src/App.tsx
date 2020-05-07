@@ -48,7 +48,7 @@ class Index extends React.Component {
         console.log(result.results.bindings);
         const data = result.results.bindings
             .map((x: any) => ({ id: x.descendant.value, name: x.descendantLabel.value, birth: x.birth.value, death: x.death.value, picture: x.pic.value, parent: x.person.value }));
-        data.unshift({ id: "http://www.wikidata.org/entity/Q9682", name: "Elizabeth II", parent: "" })
+        data.unshift({ id: "http://www.wikidata.org/entity/Q9682", name: "Elizabeth II", parent: "", picture: "" })
         console.log(data);
         const root = tree(data);
 
@@ -86,21 +86,28 @@ class Index extends React.Component {
             .join("g")
             .attr("transform", d => `translate(${d.y},${d.x})`);
 
-        node.append("svg:circle")
+        svg.append("defs")
+            .append("clipPath")
+            .attr("id", "circleCip")
+            .append("circle")
             .attr("r", 20);
 
+        node.append("circle")
+            .attr("r", 20)
+            .attr("fill", "grey");
+
         node.append("svg:image")
-            .attr("class", "circle")
             .attr("xlink:href", function (d: any) { return d.data.picture; })
-            .attr("x", function (d) { return -25; })
-            .attr("y", function (d) { return -25; })
-            .attr("height", 50)
-            .attr("width", 50)
-            .style("fill", function (d: any) { return d.data.picture; })
+            .attr("clip-path", "url(#circleCip)")
+            .attr("x", -20)
+            .attr("y", -20)
+            .attr("height", 40)
+            .attr("width", 40)
+            .attr('preserveAspectRatio', 'xMidYMid slice');
 
         node.append("text")
             .attr("dy", "0.31em")
-            .attr("x", d => d.children ? -6 : 6)
+            .attr("x", d => d.children ? -22 : 22)
             .attr("text-anchor", d => d.children ? "end" : "start")
             .text((d: any) => d.data.name)
             .clone(true).lower()
@@ -110,7 +117,7 @@ class Index extends React.Component {
             if ((d: any) => ((d.data.birth !== "") && (d.data.death == ""))) {
                 node.append("text")
                     .attr("dy", "1.3em")
-                    .attr("x", d => d.children ? -6 : 6)
+                    .attr("x", d => d.children ? -22 : 22)
                     .attr("text-anchor", d => d.children ? "end" : "start")
                     .text((d: any) => 'b. ' + d.data.birth)
                     .clone(true).lower()
@@ -118,7 +125,7 @@ class Index extends React.Component {
             } else if ((d: any) => ((d.data.birth == "") && (d.data.death !== ""))) {
                 node.append("text")
                     .attr("dy", "1.3em")
-                    .attr("x", d => d.children ? -6 : 6)
+                    .attr("x", d => d.children ? -22 : 22)
                     .attr("text-anchor", d => d.children ? "end" : "start")
                     .text((d: any) => 'd. ' + d.data.death)
                     .clone(true).lower()
@@ -126,7 +133,7 @@ class Index extends React.Component {
             } else {
                 node.append("text")
                     .attr("dy", "1.3em")
-                    .attr("x", d => d.children ? -6 : 6)
+                    .attr("x", d => d.children ? -22 : 22)
                     .attr("text-anchor", d => d.children ? "end" : "start")
                     .text((d: any) => 'b. ' + d.data.birth + ' - d. ' + d.data.death)
                     .clone(true).lower()
