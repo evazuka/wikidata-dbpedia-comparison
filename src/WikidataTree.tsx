@@ -17,12 +17,18 @@ type Data = {
     parent: string
 }
 
+const width = 800;
+
 const tree = data => {
     const root = d3.stratify()
         .id(function (d: any) { return d.id; })
         .parentId(function (d: any) { return d.parent; })
         (data);
-    return d3.tree().nodeSize([50, 150])(root);
+
+    const dx = 10;
+    const dy = width / (root.height + 1);
+
+    return [d3.tree().nodeSize([50, 150])(root), dx, dy] as const;
 }
 
 class WikidataTree extends React.Component<Props> {
@@ -98,10 +104,24 @@ class WikidataTree extends React.Component<Props> {
 
     ref!: Element
 
+    datesSubtitle = (d: any) => {
+        let subtitle = ''
+        if (d.data.birth !== '')
+            subtitle += `b. ${d.data.birth}`
+
+        if (d.data.death !== '') {
+            if (d.data.birth)
+                subtitle += ' - '
+            subtitle += `d. ${d.data.death}`
+        }
+
+        return subtitle
+    }
+
     renderD3 = (data) => {
         //data.unshift({ id: "http://www.wikidata.org/entity/Q9682", name: "Elizabeth II", parent: "", picture: "" })
         console.log(data);
-        const root = tree(data);
+        const [root, dx, dy] = tree(data);
 
         const zoom = d3.zoom();
 
@@ -117,7 +137,7 @@ class WikidataTree extends React.Component<Props> {
         const g = svg.append("g")
             .attr("font-family", "sans-serif")
             .attr("font-size", 10)
-            .attr("transform", `translate(100,${100 - x0})`);
+            .attr("transform", `translate(${dy / 3},${dx - x0})`);
 
         const link = g.append("g")
             .attr("fill", "none")
@@ -166,33 +186,25 @@ class WikidataTree extends React.Component<Props> {
             .clone(true).lower()
             .attr("stroke", "white");
 
-        if ((d: any) => (d.data.birth && d.data.death) !== "") {
-            if ((d: any) => ((d.data.birth !== "") && (d.data.death == ""))) {
-                node.append("text")
-                    .attr("dy", "1.3em")
-                    .attr("x", d => d.children ? -22 : 22)
-                    .attr("text-anchor", d => d.children ? "end" : "start")
-                    .text((d: any) => 'b. ' + d.data.birth)
-                    .clone(true).lower()
-                    .attr("stroke", "white");
-            } else if ((d: any) => ((d.data.birth == "") && (d.data.death !== ""))) {
-                node.append("text")
-                    .attr("dy", "1.3em")
-                    .attr("x", d => d.children ? -22 : 22)
-                    .attr("text-anchor", d => d.children ? "end" : "start")
-                    .text((d: any) => 'd. ' + d.data.death)
-                    .clone(true).lower()
-                    .attr("stroke", "white");
-            } else {
-                node.append("text")
-                    .attr("dy", "1.3em")
-                    .attr("x", d => d.children ? -22 : 22)
-                    .attr("text-anchor", d => d.children ? "end" : "start")
-                    .text((d: any) => 'b. ' + d.data.birth + ' - d. ' + d.data.death)
-                    .clone(true).lower()
-                    .attr("stroke", "white");
-            }
+        node.append("text")
+            .attr("dy", "1.3em")
+            .attr("x", d => d.children ? -22 : 22)
+            .attr("text-anchor", d => d.children ? "end" : "start")
+            .text(this.datesSubtitle)
+            .clone(true).lower()
+            .attr("stroke", "white");
+
+        function zoomed() {
+            g.attr("transform", d3.event.transform);
         }
+
+        svg
+            .attr("viewBox", [0, 0, width, x1 - x0 + dx * 2] as any)
+            .call(d3.zoom()
+                .extent([[0, 0], [width, x1 - x0 + dx * 2]])
+                .scaleExtent([1, 8])
+                .on("zoom", zoomed))
+
     }
 
     render() {
