@@ -1,8 +1,9 @@
 import ReactDOM from 'react-dom'
-import Index from './App';
+import App from './App'
 import React from 'react';
+import Routing from './Routing';
 
 ReactDOM.render(
-    <Index />,
+    <Routing />,
     document.getElementById('root')
 );
