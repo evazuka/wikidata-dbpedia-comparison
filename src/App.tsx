@@ -1,5 +1,6 @@
-import React from "react"
+import React from "react";
 import { Link, RouteComponentProps } from "react-router-dom";
+import "./index.css";
 
 type State = {
     value: string
@@ -34,10 +35,14 @@ class App extends React.Component<RouteComponentProps<any>, State> {
 
     render() {
         return (
-            <>
-                <input type="text" value={this.state.value} onChange={this.handleChange} />
+            <div className="container">
+                <h2>The comparison of Wikidata and DBpedia knowledge bases</h2> <br />
+                <p>Enter the link to the person's page on Wikipedia to build a family tree of his descendants</p> <br />
+                <div>
+                <input type="text" value={this.state.value} onChange={this.handleChange} style={{ width: "500px" }} />
                 <button onClick={this.handleSubmit}>View</button>
-            </>
+                </div>
+            </div>
         )
     }
 }

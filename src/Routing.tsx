@@ -11,7 +11,7 @@ import TreeComparison from "./TreeComparison";
 export default function Routing() {
     return (
         <Router>
-            <div>
+            <>
 
                 {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
@@ -23,7 +23,7 @@ export default function Routing() {
                         render={props => <App {...props} />}>
                     </Route>
                 </Switch>
-            </div>
+            </>
         </Router>
     );
 }

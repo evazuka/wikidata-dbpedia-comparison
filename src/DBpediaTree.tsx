@@ -31,7 +31,7 @@ const tree = data => {
     return [d3.tree().nodeSize([50, 150])(root), dx, dy] as const;
 }
 
-class WikidataTree extends React.Component<Props> {
+class DBpediaTree extends React.Component<Props> {
     endpointUrl = 'https://query.wikidata.org/sparql';
     rootSparqlQuery = `SELECT DISTINCT ?person ?personLabel ?birth ?death ?pic WHERE {
         BIND (wd:${this.props.wikidataId} as ?person) .
@@ -214,5 +214,4 @@ class WikidataTree extends React.Component<Props> {
         )
     }
 }
-
-export default WikidataTree
+export default DBpediaTree
