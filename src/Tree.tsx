@@ -50,14 +50,8 @@ class Tree extends React.Component<Props> {
         this.renderD3();
     }
 
-    componentDidUpdate() {
-        this.renderD3();
-    }
-
     renderD3 = () => {
         const [root, dx, dy] = tree(this.props.data);
-
-        const zoom = d3.zoom();
 
         let x0 = Infinity;
         let x1 = -x0;
@@ -65,6 +59,8 @@ class Tree extends React.Component<Props> {
             if (d.x > x1) x1 = d.x;
             if (d.x < x0) x0 = d.x;
         });
+
+        const uniqueId = Math.random();
 
         const svg = d3.select(this.ref);
 
@@ -95,7 +91,7 @@ class Tree extends React.Component<Props> {
 
         svg.append("defs")
             .append("clipPath")
-            .attr("id", "circleCip")
+            .attr("id", "circleClip" + uniqueId)
             .append("circle")
             .attr("r", 20);
 
@@ -105,7 +101,7 @@ class Tree extends React.Component<Props> {
 
         node.append("svg:image")
             .attr("xlink:href", d => d.data.picture)
-            .attr("clip-path", "url(#circleCip)")
+            .attr("clip-path", "url(#circleClip" + uniqueId + ")")
             .attr("x", -20)
             .attr("y", -20)
             .attr("height", 40)

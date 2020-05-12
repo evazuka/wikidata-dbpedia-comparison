@@ -6,6 +6,7 @@ import { Tabs, TabList, Tab, TabPanel } from "react-tabs"
 import WikidataTreeQuery from "./wikidataTreeQuery"
 import Tree, { Data } from "./Tree"
 import Statistics, { QueryOverview, QueryStatus } from "./Statistics"
+import DBpediaTreeQuery from "./dbpediaTreeQuery"
 
 type State = {
     wikidataQueryOverview: QueryOverview
@@ -17,6 +18,7 @@ type State = {
 
 class TreeComparison extends React.Component<RouteComponentProps<any>, State> {
     wikidataTreeQuery = new WikidataTreeQuery()
+    dbpediaTreeQuery = new DBpediaTreeQuery()
 
     state: State = {
         wikidataQueryOverview: {
@@ -37,6 +39,47 @@ class TreeComparison extends React.Component<RouteComponentProps<any>, State> {
 
     startComparison = async () => {
         await this.startWikidataQuery();
+        await this.startDbPediaQuery();
+    }
+
+    startDbPediaQuery = async () => {
+        this.setState(prev => ({
+            dbpediaQueryOverview: {
+                ...prev.dbpediaQueryOverview,
+                status: QueryStatus.Running
+            }
+        }));
+
+        const dbpediaUrlId = 'http://dbpedia.org/resource/' + this.props.match.params.wikiId
+
+        try {
+            const startTime = new Date().getTime();
+            const dbpediaTreeData = await this.dbpediaTreeQuery.query(dbpediaUrlId);
+            const endTime = new Date().getTime();
+
+            const time = endTime - startTime;
+
+            console.log(dbpediaTreeData)
+
+            this.setState({
+                dbpediaQueryOverview: {
+                    status: QueryStatus.Finished,
+                    time,
+                    nodeCount: dbpediaTreeData.length,
+                    error: null
+                },
+                dbpediaTreeData
+            });
+        } catch (e) {
+            this.setState({
+                dbpediaQueryOverview: {
+                    status: QueryStatus.Failed,
+                    time: null,
+                    nodeCount: null,
+                    error: "Error happened while querying data"
+                }
+            });
+        }
     }
 
     startWikidataQuery = async () => {
@@ -73,7 +116,6 @@ class TreeComparison extends React.Component<RouteComponentProps<any>, State> {
                 }
             });
         }
-
     }
 
     componentDidMount() {
@@ -101,7 +143,9 @@ class TreeComparison extends React.Component<RouteComponentProps<any>, State> {
                         : <Tree data={this.state.wikidataTreeData} />}
                 </TabPanel>
                 <TabPanel>
-                    DBpedia Tree
+                    {this.state.dbpediaTreeData === null
+                        ? <>Loading...</>
+                        : <Tree data={this.state.dbpediaTreeData} />}
                 </TabPanel>
             </Tabs>
         )
