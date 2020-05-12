@@ -21,3 +21,7 @@ code {
   display: flex;
   flex-direction: column;
 }
+
+.error {
+  color: darkred;
+}
