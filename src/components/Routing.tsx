@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import App from "./App";
 import TreeComparison from "./TreeComparison";
+import FilmographyComparison from "./FilmographyComparison";
 
 export default function Routing() {
     return (
@@ -18,6 +19,9 @@ export default function Routing() {
                 <Switch>
                     <Route path="/tree-comparison/:wikidataId/:wikiId"
                         render={props => <TreeComparison {...props} />}>
+                    </Route>
+                    <Route path="/filmography-comparison/:wikidataId/:wikiId"
+                        render={props => <FilmographyComparison {...props} />}>
                     </Route>
                     <Route path="/"
                         render={props => <App {...props} />}>

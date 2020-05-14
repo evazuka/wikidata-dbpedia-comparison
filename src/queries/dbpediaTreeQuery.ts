@@ -1,7 +1,7 @@
-import SPARQLQueryDispatcher from './query-dispatcher'
-import { Data } from './Tree'
+import SPARQLQueryDispatcher from '../query-dispatcher'
+import { TreeData } from '../components/Tree'
 
-const mapQuery = (data): Data[] => {
+const mapQuery = (data): TreeData[] => {
     return data
         .map((x: any) => ({
             id: x.descendant.value,
@@ -13,7 +13,7 @@ const mapQuery = (data): Data[] => {
         }));
 }
 
-const mapRootQuery = (data): Data[] => {
+const mapRootQuery = (data): TreeData[] => {
     return data
         .map((x: any) => ({
             id: x.person.value,

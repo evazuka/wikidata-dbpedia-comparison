@@ -1,0 +1,34 @@
+.card {
+   margin: 10px;
+   padding: 15px;;
+   border: 1px solid black;
+   border-radius: 10px;
+   display: flex;
+   align-items: center;
+   background: linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 50%, rgba(225,225,225,1) 100%);
+}
+
+.wikidata.card {
+    width: 200px;
+}
+
+.dbpedia.card {
+    width: 43%;
+}
+
+.text p {
+    margin: 0;
+}
+
+
+.cards {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.card .image { 
+    text-align: center;
+}
+.card .image img{
+    max-width: 200px;
+}

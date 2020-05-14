@@ -3,8 +3,8 @@ import * as d3 from "d3";
 
 const width = 800;
 
-const tree = (data: Data[]) => {
-    const root = d3.stratify<Data>()
+const tree = (data: TreeData[]) => {
+    const root = d3.stratify<TreeData>()
         .id(d => d.id)
         .parentId(d => d.parent)
         (data);
@@ -12,11 +12,10 @@ const tree = (data: Data[]) => {
     const dx = 10;
     const dy = width / (root.height + 1);
 
-    return [d3.tree<Data>().nodeSize([50, 150])(root), dx, dy] as const;
+    return [d3.tree<TreeData>().nodeSize([50, 150])(root), dx, dy] as const;
 }
 
-
-const getDatesSubtitle = (d: d3.HierarchyPointNode<Data>) => {
+const getDatesSubtitle = (d: d3.HierarchyPointNode<TreeData>) => {
     let subtitle = ''
     if (d.data.birth !== '')
         subtitle += `b. ${d.data.birth}`;
@@ -30,7 +29,7 @@ const getDatesSubtitle = (d: d3.HierarchyPointNode<Data>) => {
     return subtitle;
 }
 
-export type Data = {
+export type TreeData = {
     id: string,
     name: string,
     birth: string,
@@ -40,7 +39,7 @@ export type Data = {
 }
 
 type Props = {
-    data: Data[]
+    data: TreeData[]
 }
 
 class Tree extends React.Component<Props> {

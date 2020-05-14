@@ -1,24 +1,24 @@
 import React from "react"
 import { RouteComponentProps } from "react-router-dom"
 import 'react-tabs/style/react-tabs.css'
-import './treeComparison.css'
+import '../filmComparison.css'
 import { Tabs, TabList, Tab, TabPanel } from "react-tabs"
-import WikidataTreeQuery from "./wikidataTreeQuery"
-import Tree, { Data } from "./Tree"
+import WikidataFilmQuery from "../queries/wikidataFilmQuery"
+import DBpediaFilmQuery from "../queries/dbpediaFilmQuery"
+import Filmography, { FilmographyData } from "./Filmography"
 import Statistics, { QueryOverview, QueryStatus } from "./Statistics"
-import DBpediaTreeQuery from "./dbpediaTreeQuery"
 
 type State = {
     wikidataQueryOverview: QueryOverview
     dbpediaQueryOverview: QueryOverview
 
-    wikidataTreeData: Data[] | null
-    dbpediaTreeData: Data[] | null
+    wikidataFilmData: FilmographyData[] | null
+    dbpediaFilmData: FilmographyData[] | null
 }
 
-class TreeComparison extends React.Component<RouteComponentProps<any>, State> {
-    wikidataTreeQuery = new WikidataTreeQuery()
-    dbpediaTreeQuery = new DBpediaTreeQuery()
+class FilmographyComparison extends React.Component<RouteComponentProps<any>, State> {
+    wikidataFilmQuery = new WikidataFilmQuery()
+    dbpediaFilmQuery = new DBpediaFilmQuery()
 
     state: State = {
         wikidataQueryOverview: {
@@ -33,8 +33,8 @@ class TreeComparison extends React.Component<RouteComponentProps<any>, State> {
             time: null,
             error: null
         },
-        dbpediaTreeData: null,
-        wikidataTreeData: null,
+        dbpediaFilmData: null,
+        wikidataFilmData: null,
     }
 
     startComparison = async () => {
@@ -54,21 +54,21 @@ class TreeComparison extends React.Component<RouteComponentProps<any>, State> {
 
         try {
             const startTime = new Date().getTime();
-            const dbpediaTreeData = await this.dbpediaTreeQuery.query(dbpediaUrlId);
+            const dbpediaFilmData = await this.dbpediaFilmQuery.query(dbpediaUrlId);
             const endTime = new Date().getTime();
 
             const time = endTime - startTime;
 
-            console.log(dbpediaTreeData)
+            console.log(dbpediaFilmData)
 
             this.setState({
                 dbpediaQueryOverview: {
                     status: QueryStatus.Finished,
                     time,
-                    nodeCount: dbpediaTreeData.length,
+                    nodeCount: dbpediaFilmData.length,
                     error: null
                 },
-                dbpediaTreeData
+                dbpediaFilmData
             });
         } catch (e) {
             this.setState({
@@ -92,8 +92,10 @@ class TreeComparison extends React.Component<RouteComponentProps<any>, State> {
 
         try {
             const startTime = new Date().getTime();
-            const wikidataTreeData = await this.wikidataTreeQuery.query(this.props.match.params.wikidataId);
+            const wikidataFilmData = await this.wikidataFilmQuery.query(this.props.match.params.wikidataId);
             const endTime = new Date().getTime();
+
+            console.log(wikidataFilmData)
 
             const time = endTime - startTime;
 
@@ -101,10 +103,10 @@ class TreeComparison extends React.Component<RouteComponentProps<any>, State> {
                 wikidataQueryOverview: {
                     status: QueryStatus.Finished,
                     time,
-                    nodeCount: wikidataTreeData.length,
+                    nodeCount: wikidataFilmData.length,
                     error: null
                 },
-                wikidataTreeData
+                wikidataFilmData
             });
         } catch (e) {
             this.setState({
@@ -127,8 +129,8 @@ class TreeComparison extends React.Component<RouteComponentProps<any>, State> {
             <Tabs forceRenderTabPanel={true}>
                 <TabList>
                     <Tab>Statistics</Tab>
-                    <Tab>Wikidata Tree</Tab>
-                    <Tab>DBpedia Tree</Tab>
+                    <Tab>Wikidata Filmography</Tab>
+                    <Tab>DBpedia Filmography</Tab>
                 </TabList>
 
                 <TabPanel>
@@ -138,18 +140,18 @@ class TreeComparison extends React.Component<RouteComponentProps<any>, State> {
                     />
                 </TabPanel>
                 <TabPanel>
-                    {this.state.wikidataTreeData === null
+                    {this.state.wikidataFilmData === null
                         ? <>Loading...</>
-                        : <Tree data={this.state.wikidataTreeData} />}
+                        : <Filmography data={this.state.wikidataFilmData} type='wikidata' />}
                 </TabPanel>
                 <TabPanel>
-                    {this.state.dbpediaTreeData === null
+                    {this.state.dbpediaFilmData === null
                         ? <>Loading...</>
-                        : <Tree data={this.state.dbpediaTreeData} />}
+                        : <Filmography data={this.state.dbpediaFilmData} type='dbpedia' />}
                 </TabPanel>
             </Tabs>
         )
     }
 }
 
-export default TreeComparison
+export default FilmographyComparison

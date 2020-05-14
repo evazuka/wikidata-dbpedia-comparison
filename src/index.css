@@ -25,3 +25,7 @@ code {
 .error {
   color: darkred;
 }
+
+.checkbox-group label {
+  display: flex;
+}
