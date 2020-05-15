@@ -1,0 +1,12 @@
+.footer {
+    position: absolute;
+    bottom: 0;
+    height: 2.5rem;
+    margin-top:auto;
+    background-color: whitesmoke !important;
+    padding: 2em 10em;
+    left: 0;
+    text-align: center;
+    word-wrap: break-all;
+    white-space: normal;
+  }

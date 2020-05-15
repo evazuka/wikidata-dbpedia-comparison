@@ -8,26 +8,29 @@ import {
 import App from "./App";
 import TreeComparison from "./TreeComparison";
 import FilmographyComparison from "./FilmographyComparison";
+import Footer from "./Footer";
 
 export default function Routing() {
     return (
-        <Router>
-            <>
+        <>
+            <Router>
+                <>
 
-                {/* A <Switch> looks through its children <Route>s and
+                    {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
-                <Switch>
-                    <Route path="/tree-comparison/:wikidataId/:wikiId"
-                        render={props => <TreeComparison {...props} />}>
-                    </Route>
-                    <Route path="/filmography-comparison/:wikidataId/:wikiId"
-                        render={props => <FilmographyComparison {...props} />}>
-                    </Route>
-                    <Route path="/"
-                        render={props => <App {...props} />}>
-                    </Route>
-                </Switch>
-            </>
-        </Router>
+                    <Switch>
+                        <Route path="/tree-comparison/:wikidataId/:wikiId"
+                            render={props => <TreeComparison {...props} />}>
+                        </Route>
+                        <Route path="/filmography-comparison/:wikidataId/:wikiId"
+                            render={props => <FilmographyComparison {...props} />}>
+                        </Route>
+                        <Route path="/"
+                            render={props => <App {...props} />}>
+                        </Route>
+                    </Switch>
+                </>
+            </Router>
+        </>
     );
 }

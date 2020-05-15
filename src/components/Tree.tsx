@@ -136,7 +136,7 @@ class Tree extends React.Component<Props> {
 
     render() {
         return (
-            <svg className="container" ref={(ref: SVGSVGElement) => this.ref = ref} width={800} height={window.innerHeight}>
+            <svg className="container" ref={(ref: SVGSVGElement) => this.ref = ref} width={800} height={window.innerHeight - 100}>
             </svg>
         )
     }

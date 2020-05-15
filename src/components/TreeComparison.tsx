@@ -1,7 +1,6 @@
 import React from "react"
 import { RouteComponentProps } from "react-router-dom"
 import 'react-tabs/style/react-tabs.css'
-import '../treeComparison.css'
 import { Tabs, TabList, Tab, TabPanel } from "react-tabs"
 import WikidataTreeQuery from "../queries/wikidataTreeQuery"
 import Tree, { TreeData } from "./Tree"
