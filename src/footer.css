@@ -1,12 +1,16 @@
 .footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1em 10em;
     position: absolute;
     bottom: 0;
-    height: 2.5rem;
+    height: 50px;
     margin-top:auto;
     background-color: whitesmoke !important;
-    padding: 2em 10em;
     left: 0;
     text-align: center;
-    word-wrap: break-all;
     white-space: normal;
+    box-sizing: border-box;
+    width: 100%;
   }
